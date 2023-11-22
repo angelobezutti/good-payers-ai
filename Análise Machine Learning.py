@@ -11,21 +11,21 @@ Previsão de aprovação de crédito
 
 #CRIAÇÃO DA CONEXÃO DO GOOGLE DRIVE
 
-#from google.colab import drive
-#drive.mount('/content/drive')
+from google.colab import drive
+drive.mount('/content/drive')
 
 #IMPORTAÇÃO DAS BIBLIOTECAS NECESÁRIAS
 
-#import numpy as np 
-#import pandas as pd
-#import seaborn as sns
-#import matplotlib.pyplot as plt
-#from sklearn.model_selection import train_test_split
-#from imblearn.over_sampling import SMOTE
-#from imblearn.under_sampling import TomekLinks
-#from sklearn.cluster import KMeans
-#from sklearn.ensemble import RandomForestClassifier
-#from sklearn.neighbors import KNeighborsClassifier
+import numpy as np 
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import TomekLinks
+from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 """Link dos datasets:
 https://www.kaggle.com/datasets/rikdifos/credit-card-approval-prediction
@@ -33,22 +33,22 @@ https://www.kaggle.com/datasets/rikdifos/credit-card-approval-prediction
 
 #LEITURA DO ARQUIVO APPLICATION RECORD
 
-#pred_credito = pd.read_csv('drive/MyDrive/Colab Notebooks/G2/Trabalho G2/application_record.csv')
-#pred_credito.head()
+pred_credito = pd.read_csv('drive/MyDrive/Colab Notebooks/G2/Trabalho G2/application_record.csv')
+pred_credito.head()
 
 #LEITURA DO ARQUIVO CREDIT RECORD
 
-#pred_credito2 = pd.read_csv('drive/MyDrive/Colab Notebooks/G2/Trabalho G2/credit_record.csv')
-#pred_credito2.head()
+pred_credito2 = pd.read_csv('drive/MyDrive/Colab Notebooks/G2/Trabalho G2/credit_record.csv')
+pred_credito2.head()
 
 #JUNTANDO OS DF
-#DF = pd.merge(pred_credito, pred_credito2, on='ID')
+DF = pd.merge(pred_credito, pred_credito2, on='ID')
 
 """#Pré-processamento de dados"""
 
 #RENOMEANDO AS COLUNAS PARA MELHOR ENTENDIMENTO
-#DF = DF.rename(columns={'CODE_GENDER':'GENERO','FLAG_OWN_CAR':'POSSUI_CARRO','FLAG_OWN_REALTY':'POSSUI_PROPRIEDADE','CNT_CHILDREN':'QTD_FILHOS','AMT_INCOME_TOTAL':'SALARIO_ANUAL','NAME_INCOME_TYPE':'CATEGORIA_RENDA', 
- #                            'NAME_EDUCATION_TYPE':'NIVEL_EDUCAÇÃO','NAME_FAMILY_STATUS':'ESTADO_CIVIL','NAME_HOUSING_TYPE':'MODO_VIVER','DAYS_BIRTH':'DIAS_DESDE_ANIVERSÁRIO','DAYS_EMPLOYED':'DIAS_EMPREGO','FLAG_MOBIL':'POSSUI_CELULAR','FLAG_WORK_PHONE':'POSSUI_CELULAR_TRABALHO','FLAG_PHONE':'POSSUI_TELEFONE','FLAG_EMAIL':'POSSUI_EMAIL','OCCUPATION_TYPE':'OCUPAÇÃO','CNT_FAM_MEMBERS':'QTD_MEMBROS_FAMILIA','MONTHS_BALANCE':'SALDO_MESES'})
+DF = DF.rename(columns={'CODE_GENDER':'GENERO','FLAG_OWN_CAR':'POSSUI_CARRO','FLAG_OWN_REALTY':'POSSUI_PROPRIEDADE','CNT_CHILDREN':'QTD_FILHOS','AMT_INCOME_TOTAL':'SALARIO_ANUAL','NAME_INCOME_TYPE':'CATEGORIA_RENDA', 
+                             'NAME_EDUCATION_TYPE':'NIVEL_EDUCAÇÃO','NAME_FAMILY_STATUS':'ESTADO_CIVIL','NAME_HOUSING_TYPE':'MODO_VIVER','DAYS_BIRTH':'DIAS_DESDE_ANIVERSÁRIO','DAYS_EMPLOYED':'DIAS_EMPREGO','FLAG_MOBIL':'POSSUI_CELULAR','FLAG_WORK_PHONE':'POSSUI_CELULAR_TRABALHO','FLAG_PHONE':'POSSUI_TELEFONE','FLAG_EMAIL':'POSSUI_EMAIL','OCCUPATION_TYPE':'OCUPAÇÃO','CNT_FAM_MEMBERS':'QTD_MEMBROS_FAMILIA','MONTHS_BALANCE':'SALDO_MESES'})
 
 #CLASSIFICANDO O ATRIBUTO STATUS
 
@@ -61,154 +61,154 @@ https://www.kaggle.com/datasets/rikdifos/credit-card-approval-prediction
 #C = QUITADO NO MÊS ATUAL
 #X = SEM EMPRÉSTIMO NO MÊS
 
-#STATUS_CREDITO = {'C' : 'Em dia',
- #              'X' : 'Em dia',
-  #             '0' : 'Atraso',
-   #            '1' : 'Atraso',
-    #           '2' : 'Atraso',
-     #          '3' : 'Atraso',
-      #         '4' : 'Atraso',
-       #        '5' : 'Atraso'}
+STATUS_CREDITO = {'C' : 'Em dia',
+               'X' : 'Em dia',
+               '0' : 'Atraso',
+               '1' : 'Atraso',
+               '2' : 'Atraso',
+               '3' : 'Atraso',
+               '4' : 'Atraso',
+               '5' : 'Atraso'}
 
-#DF.replace({'STATUS' : STATUS_CREDITO}, inplace=True)
+DF.replace({'STATUS' : STATUS_CREDITO}, inplace=True)
 
-#DF
+DF
 
 #Removendo IDs duplicados
-#DF = DF.drop_duplicates('ID',keep='first')
+DF = DF.drop_duplicates('ID',keep='first')
 
 #VERIFICANDO SE EXISTEM REGISTROS NULOS
-#DF.isnull().values.any()
+DF.isnull().values.any()
 
 #VERIFICANDO ONDE ESTÃO OS VALORES NULOS
-#DF.isnull().sum()
+DF.isnull().sum()
 
 #SUBSTITUINDO OS REGISTROS NULOS
-#ocupacao = DF['OCUPAÇÃO']
-#ocupacao.fillna('Vacant', inplace=True)
+ocupacao = DF['OCUPAÇÃO']
+ocupacao.fillna('Vacant', inplace=True)
 
 #CONFIRMANDO SE AINDA EXISTEM NULL/NA
-#DF.isnull().values.any()
+DF.isnull().values.any()
 
 #VERIFICANDO O TIPO DOS DADOS
-#DF.dtypes
+DF.dtypes
 
 #Retirando colunas que não trazem informação relevante
-#DF = DF.drop(columns=['ID'])
-#DF = DF.drop(columns=['POSSUI_CELULAR'])
-#DF = DF.drop(columns=['POSSUI_CELULAR_TRABALHO'])
-#DF = DF.drop(columns=['POSSUI_TELEFONE'])
-#DF = DF.drop(columns=['POSSUI_EMAIL'])
-#DF = DF.drop(columns=['GENERO'])
+DF = DF.drop(columns=['ID'])
+DF = DF.drop(columns=['POSSUI_CELULAR'])
+DF = DF.drop(columns=['POSSUI_CELULAR_TRABALHO'])
+DF = DF.drop(columns=['POSSUI_TELEFONE'])
+DF = DF.drop(columns=['POSSUI_EMAIL'])
+DF = DF.drop(columns=['GENERO'])
 
 #AJUSTANDO O TIPO DE DADOS
 
-#DF['POSSUI_CARRO'].replace('Y',1,inplace=True)
-#DF['POSSUI_CARRO'].replace('N',0,inplace=True)
-#DF['POSSUI_PROPRIEDADE'].replace('Y',1,inplace=True)
-#DF['POSSUI_PROPRIEDADE'].replace('N',0,inplace=True)
+DF['POSSUI_CARRO'].replace('Y',1,inplace=True)
+DF['POSSUI_CARRO'].replace('N',0,inplace=True)
+DF['POSSUI_PROPRIEDADE'].replace('Y',1,inplace=True)
+DF['POSSUI_PROPRIEDADE'].replace('N',0,inplace=True)
 
-#DF['OCUPAÇÃO'] = DF['OCUPAÇÃO'].astype('category')
-#DF['CATEGORIA_RENDA'] = DF['CATEGORIA_RENDA'].astype('category')
-#DF['MODO_VIVER'] = DF['MODO_VIVER'].astype('category')
-#DF['ESTADO_CIVIL'] = DF['ESTADO_CIVIL'].astype('category')
+DF['OCUPAÇÃO'] = DF['OCUPAÇÃO'].astype('category')
+DF['CATEGORIA_RENDA'] = DF['CATEGORIA_RENDA'].astype('category')
+DF['MODO_VIVER'] = DF['MODO_VIVER'].astype('category')
+DF['ESTADO_CIVIL'] = DF['ESTADO_CIVIL'].astype('category')
 
-#DF
+DF
 
 """#Análise Exploratória"""
 
 #Verificando quantidade de linhas e colunas
-#DF.shape
+DF.shape
 
 #Plotando histograma das classificações do atributo Status
-#plt.figure(figsize=(8,10))
-#DF['STATUS'].hist()
+plt.figure(figsize=(8,10))
+DF['STATUS'].hist()
 
 #Possuem propriedade
-#plt.figure(figsize=(10, 12))
-#DF.groupby('POSSUI_PROPRIEDADE')['POSSUI_PROPRIEDADE'].count().plot(kind='pie')
+plt.figure(figsize=(10, 12))
+DF.groupby('POSSUI_PROPRIEDADE')['POSSUI_PROPRIEDADE'].count().plot(kind='pie')
 
 #Contagem regressiva a partir do dia atual (0), -1 significa 
-#plt.figure(figsize=(10, 12))
-#DF.hist(column='DIAS_DESDE_ANIVERSÁRIO');
+plt.figure(figsize=(10, 12))
+DF.hist(column='DIAS_DESDE_ANIVERSÁRIO');
 
 #Contagem de empregados e desempregados (Contagem de dias desde o início do emprego atual)
-#plt.figure(figsize=(10, 12))
-#DF.hist(column='DIAS_EMPREGO');
+plt.figure(figsize=(10, 12))
+DF.hist(column='DIAS_EMPREGO');
 
 #Análisando a correlação
-#plt.figure(figsize=(14,10))
+plt.figure(figsize=(14,10))
 
-#sns.heatmap(DF.corr(), cmap="Blues", annot=True)
-#plt.show()
+sns.heatmap(DF.corr(), cmap="Blues", annot=True)
+plt.show()
 
 """#Treino e Teste
 
 """
 
 #Definimos a coluna a ser considerada no teste e dropamos a mesma
-#y = DF.STATUS
-#DF.drop(columns=['STATUS'], inplace=True)
+y = DF.STATUS
+DF.drop(columns=['STATUS'], inplace=True)
 
 #Fizemos a contagem da classificação 'em dia' e em 'atraso' da coluna Status
-#y.value_counts()
+y.value_counts()
 
 #Definindo as colunas a considerar
-#x = DF[DF.columns[1:-3]]
+x = DF[DF.columns[1:-3]]
 
 #Contagem das classificações 'Em dia' e 'Atraso' da coluna Status
-#x = pd.get_dummies(x,drop_first=True)
+x = pd.get_dummies(x,drop_first=True)
 
 #Declaração das variáveis de treino, definição da porcentagem do dataset a ser considerado
-#X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0, stratify=y)
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0, stratify=y)
 
 # Técnica de limpeza de dados desbalanceados
-#tl = TomekLinks(sampling_strategy='majority')
-#x_tl, y_tl = tl.fit_resample(X_train,y_train)
+tl = TomekLinks(sampling_strategy='majority')
+x_tl, y_tl = tl.fit_resample(X_train,y_train)
 
 # Técnica de limpeza de dados desbalanceados
-#smote = SMOTE()
-#x_smote, y_smote = smote.fit_resample(x_tl, y_tl)
+smote = SMOTE()
+x_smote, y_smote = smote.fit_resample(x_tl, y_tl)
 
 """##KNN Classificação"""
 
 # Técnica para analisar de proximidade entre dados
 # Dados similares tendem a estar concentrados na mesma região de dispersão dos dados
-#knn = KNeighborsClassifier(n_neighbors=1)
-#knn.fit(x_smote, y_smote)
-#y_pred = knn.predict(X_test)
-#print(knn.score(X_test, y_test))
+knn = KNeighborsClassifier(n_neighbors=1)
+knn.fit(x_smote, y_smote)
+y_pred = knn.predict(X_test)
+print(knn.score(X_test, y_test))
 
 """#Random Forest Classificação"""
 
-#clf = RandomForestClassifier(max_depth=2, random_state=10)
-#clf.fit(x_smote, y_smote)
-#y_pred = clf.predict(X_test)
-#print(clf.score(X_test, y_test))
+clf = RandomForestClassifier(max_depth=2, random_state=10)
+clf.fit(x_smote, y_smote)
+y_pred = clf.predict(X_test)
+print(clf.score(X_test, y_test))
 
 #def plot_feature_importance(importance,names,model_type):
 
 #Cria arrays a partir da importância e dos nomes dos recursos
-#    feature_importance = np.array(importance)
- #   feature_names = np.array(names)
+    feature_importance = np.array(importance)
+    feature_names = np.array(names)
 
 #Criar um DataFrame usando um dicionário
-#    data={'feature_names':feature_names,'feature_importance':feature_importance}
- #   fi_df = pd.DataFrame(data)
+    data={'feature_names':feature_names,'feature_importance':feature_importance}
+    fi_df = pd.DataFrame(data)
 
 #Classifica o DataFrame para diminuir a importância do recurso
-#    fi_df.sort_values(by=['feature_importance'], ascending=False,inplace=True)
+    fi_df.sort_values(by=['feature_importance'], ascending=False,inplace=True)
 
 #Define o tamanho do gráfico de barras
-#    plt.figure(figsize=(13,20))
+    plt.figure(figsize=(13,20))
 
 #Plota gráfico de barras Searborn
-#    sns.barplot(x=fi_df['feature_importance'], y=fi_df['feature_names'])
+    sns.barplot(x=fi_df['feature_importance'], y=fi_df['feature_names'])
 
 #Adiciona rótulos no gráfico
-#    plt.title(model_type + ' IMPORTÂNCIA')
-#    plt.xlabel('FEATURE IMPORTANCE')
-#    plt.ylabel('FEATURE NAMES')
+    plt.title(model_type + ' IMPORTÂNCIA')
+    plt.xlabel('FEATURE IMPORTANCE')
+    plt.ylabel('FEATURE NAMES')
 
 #Grafico dos atributos que melhor se relacionam com um bom pagar
-#plot_feature_importance(clf.feature_importances_,X_train.columns,'RANDOM FOREST')
+plot_feature_importance(clf.feature_importances_,X_train.columns,'RANDOM FOREST')
